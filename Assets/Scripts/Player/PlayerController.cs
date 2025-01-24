@@ -14,21 +14,23 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D _rigidbody2D;
     private Vector2 _input_direction;
     private string _horizontal_axis;
-    private KeyCode _jump_key;
+    private KeyCode _jump_key_controller;
+    private KeyCode _jump_key_keyboard;
     private int _jump_count;
 
     private void Awake()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _horizontal_axis = "Horizontal" + _player_id;
-        _jump_key = _player_id == 1 ? KeyCode.Joystick1Button0 : KeyCode.Joystick2Button0;
+        _jump_key_controller = _player_id == 1 ? KeyCode.Joystick1Button0 : KeyCode.Joystick2Button0;
+        _jump_key_keyboard = _player_id == 1 ? KeyCode.W : KeyCode.I;
         _jump_count = PlayerConstants.JUMP_COUNT;
     }
 
     private void Update()
     {
         _input_direction = new Vector2(Input.GetAxis(_horizontal_axis), 0f);
-        if(_jump_count > 0 && Input.GetKeyDown(_jump_key))
+        if(_jump_count > 0 && (Input.GetKeyDown(_jump_key_controller) || Input.GetKeyDown(_jump_key_keyboard)))
         {
             _jump_count--;
             _rigidbody2D.AddForce(Vector2.up * _jump_impulse_force, ForceMode2D.Impulse);
