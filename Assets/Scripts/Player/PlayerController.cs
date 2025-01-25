@@ -45,12 +45,14 @@ public class PlayerController : MonoBehaviour
     private Transform _left_throwable_anchor;
     [SerializeField]
     private Transform _right_throwable_anchor;
+    private Animator _animator_controller;
 
     private void Awake()
     {
         _last_throwable_hit_time = Time.time;
         _last_dash_time = Time.time - PlayerConstants.DASH_COOLDOWN;
         _last_throwable_time = Time.time - PlayerConstants.THROWABLE_COOLDOWN;
+        _animator_controller = GetComponent<Animator>();
 
         _sprite_renderer = GetComponent<SpriteRenderer>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
@@ -73,18 +75,12 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (!enabled)
-        {
-            return;
-        }
-
-
         // Wrapping
-        if(transform.position.x < -_horizontal_boundary)
+        if (transform.position.x < -_horizontal_boundary)
         {
             transform.position = new Vector3(_horizontal_boundary - 0.5f, transform.position.y, transform.position.z);
         }
-        else if(transform.position.x > _horizontal_boundary)
+        else if (transform.position.x > _horizontal_boundary)
         {
             transform.position = new Vector3(-_horizontal_boundary + 0.5f, transform.position.y, transform.position.z);
         }
@@ -93,17 +89,23 @@ public class PlayerController : MonoBehaviour
         _input_direction = new Vector2(Input.GetAxis(_horizontal_axis), Input.GetAxis(_vertical_axis));
 
         //Flip
-        if(_input_direction.x > 0f)
+        if (_input_direction.x > 0f)
         {
             _sprite_renderer.flipX = false;
         }
-        else if(_input_direction.x < 0f)
+        else if (_input_direction.x < 0f)
         {
             _sprite_renderer.flipX = true;
         }
 
+        _animator_controller.SetBool("moving", Mathf.Abs(_input_direction.x) > 0f);
+        if (!_enabled)
+        {
+            return;
+        }
+
         //Jump
-        if(_jump_count > 0 && (Input.GetKeyDown(_jump_key_controller) || Input.GetKeyDown(_jump_key_keyboard)))
+        if (_jump_count > 0 && (Input.GetKeyDown(_jump_key_controller) || Input.GetKeyDown(_jump_key_keyboard)))
         {
             _jump_count--;
             _rigidbody2D.AddForce(Vector2.up * _jump_impulse_force, ForceMode2D.Impulse);
@@ -113,6 +115,7 @@ public class PlayerController : MonoBehaviour
         if (Time.time - _last_dash_time > PlayerConstants.DASH_COOLDOWN && (Input.GetKeyDown(_dash_key_controller) || Input.GetKeyDown(_dash_key_keyboard)))
         {
             _last_dash_time = Time.time;
+            _animator_controller.SetTrigger("dash");
 
             if (_sprite_renderer.flipX)
             {
@@ -128,7 +131,6 @@ public class PlayerController : MonoBehaviour
         {
             _dash_speed = Mathf.Lerp(_dash_max_speed, 0f, Time.time - _last_dash_time / PlayerConstants.DASH_LERP_TIME);
         }
-
 
         //Throwable
         if (Time.time - _last_throwable_time > PlayerConstants.THROWABLE_COOLDOWN && (Input.GetKeyDown(_throwable_key_controller) || Input.GetKeyDown(_throwable_key_keyboard)))
@@ -149,10 +151,10 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if(_throwable_stun)
+        if (_throwable_stun)
         {
             _throwable_stun_speed = Mathf.Lerp(_throwable_stun_max_speed, 0f, Time.time - _last_throwable_hit_time / PlayerConstants.THROABLE_STUN_DURATION);
-            if(_throwable_stun_speed == 0f)
+            if (_throwable_stun_speed == 0f)
             {
                 _throwable_stun = false;
             }
@@ -161,11 +163,6 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!enabled)
-        {
-            return;
-        }
-
         _rigidbody2D.linearVelocity = new Vector2(_throwable_stun_speed + _dash_speed + _speed * _input_direction.x, _rigidbody2D.linearVelocity.y);
     }
 
@@ -180,7 +177,7 @@ public class PlayerController : MonoBehaviour
     private bool IsCollidingWithGround(Collider2D collider2D)
     {
 
-        if(_player_id == 1)
+        if (_player_id == 1)
         {
             return collider2D.gameObject.layer == LayerMask.NameToLayer(LayerMaskNames.PLATFORM1) || collider2D.gameObject.layer == LayerMask.NameToLayer(LayerMaskNames.GROUND);
         }
@@ -195,12 +192,11 @@ public class PlayerController : MonoBehaviour
         _enabled = value;
     }
 
-    public void ThrowableStun(bool stun_direction)
+    public void ThrowableStun(Vector2 direction)
     {
-        _last_throwable_time = Time.time;
+        _last_throwable_hit_time = Time.time;
         _throwable_stun = true;
-        //true right, false left
-        if(stun_direction)
+        if (direction.x > 0f)
         {
             _throwable_stun_max_speed = PlayerConstants.THROWABLE_STUN_MAX_SPEED;
         }

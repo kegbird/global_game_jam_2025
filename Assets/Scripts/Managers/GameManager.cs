@@ -1,10 +1,15 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     private static GameManager _instance;
 
+    [SerializeField]
+    private GameObject _safe_platform;
+    [SerializeField]
+    private float _round_time;
     [SerializeField]
     private Transform _player_1_transform;
     [SerializeField]
@@ -28,6 +33,7 @@ public class GameManager : MonoBehaviour
         _ui_manager = GetComponent<UIManager>();
     }
 
+
     private void Start()
     {
         _player_1_transform = GameObject.FindGameObjectWithTag("Player1").transform;
@@ -35,37 +41,63 @@ public class GameManager : MonoBehaviour
         _player_1_controller = _player_1_transform.GetComponent<PlayerController>();
         _player_2_controller = _player_2_transform.GetComponent<PlayerController>();
         _game_over = false;
+        StartCoroutine(_ui_manager.HideBlackScreen());
         StartCoroutine(DelayBeforeStartCoroutine());
     }
 
     private IEnumerator DelayBeforeStartCoroutine()
     {
+        _ui_manager.SetTimerText(_round_time.ToString());
         _ui_manager.SetMessageText("Ready?");
         yield return new WaitForSeconds(3f);
         _player_1_controller.SetEnabled(true);
         _player_2_controller.SetEnabled(true);
-        StartCoroutine(GameOverCheckerCoroutine());
+        StartCoroutine(GameManagerCoroutine());
         _ui_manager.SetMessageText("Go!");
         yield return new WaitForSeconds(1f);
+        _safe_platform.SetActive(false);
         _ui_manager.SetMessageText("");
     }
 
-    private IEnumerator GameOverCheckerCoroutine()
+    private IEnumerator GameManagerCoroutine()
     {
         while (!_game_over)
         {
             yield return new WaitForSeconds(1f);
+            _round_time -= 1f;
+            _ui_manager.SetTimerText(_round_time.ToString());
+
+            if(_round_time == 0)
+            {
+                _game_over = true;
+                if(_player_1_score> _player_2_score)
+                {
+                    _ui_manager.SetMessageText("Player 1 Wins");
+                }
+                else if(_player_2_score > _player_1_score)
+                {
+                    _ui_manager.SetMessageText("Player 2 Wins");
+                }
+                else
+                {
+                    _ui_manager.SetMessageText("Draw");
+                }
+            }
             if (_player_1_transform.position.y < _player_deadline.position.y)
             {
                 _game_over = true;
-                _ui_manager.SetMessageText("Player 2");
+                _ui_manager.SetMessageText("Player 2 Wins");
             }
             else if(_player_2_transform.position.y < _player_deadline.position.y)
             {
                 _game_over = true;
-                _ui_manager.SetMessageText("Player 1");
+                _ui_manager.SetMessageText("Player 1 Wins");
             }
         }
+
+        yield return new WaitForSeconds(2f);
+        StartCoroutine(_ui_manager.ShowBlackScreen());
+        SceneManager.LoadScene(Constants.MAIN_MENU_SCENE_INDEX);
     }
 
     public void IncreaseScore(int amount, int player_id)

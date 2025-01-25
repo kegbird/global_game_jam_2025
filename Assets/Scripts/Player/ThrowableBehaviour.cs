@@ -5,6 +5,7 @@ public class ThrowableBehaviour : MonoBehaviour
     private GameManager _game_manager;
     private SpriteRenderer _sprite_renderer;
     private Rigidbody2D _rigidbody2D;
+    private Vector2 _direction;
     private int _player_id;
 
     private void Awake()
@@ -17,6 +18,7 @@ public class ThrowableBehaviour : MonoBehaviour
     public void Throw(Vector2 direction, float force, int player_id)
     {
         _player_id = player_id;
+        _direction = direction;
 
         if(direction.x > 0)
         {
@@ -49,7 +51,7 @@ public class ThrowableBehaviour : MonoBehaviour
         if((collision.gameObject.layer == LayerMask.NameToLayer(LayerMaskNames.PLAYER1) && _player_id == 2) || (collision.gameObject.layer == LayerMask.NameToLayer(LayerMaskNames.PLAYER2) && _player_id == 1))
         {
             PlayerController player_controller = collision.gameObject.GetComponent<PlayerController>();
-            player_controller.ThrowableStun(_sprite_renderer.flipX);
+            player_controller.ThrowableStun(_direction);
             Disable();
         }
     }

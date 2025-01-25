@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 309225214501322271}
   - component: {fileID: 1087645964636596112}
   - component: {fileID: 6026597293536697123}
+  - component: {fileID: 6405807483231829923}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player1
@@ -112,12 +113,12 @@ SpriteRenderer:
   m_SortingLayerID: -1611795525
   m_SortingLayer: 1
   m_SortingOrder: 1
-  m_Sprite: {fileID: 1197855320226781875, guid: 19cc6c0040122df4ba583d3fd70c237d, type: 3}
+  m_Sprite: {fileID: 1338583825, guid: b81b7bf0ee565ba45babde3ab86bf7ac, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.01, y: 0.01}
+  m_Size: {x: 0.8, y: 1.25}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -205,18 +206,40 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.13223165, y: 0.74093425}
+  m_Offset: {x: 0.032838732, y: 0.65753925}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0}
-    oldSize: {x: 1.54, y: 1.47}
-    newSize: {x: 0.01, y: 0.01}
+    oldSize: {x: 0.8, y: 1.25}
+    newSize: {x: 0.8, y: 1.25}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.94063115, y: 1.5181315}
+  m_Size: {x: 0.8477791, y: 1.3513415}
   m_EdgeRadius: 0
+--- !u!95 &6405807483231829923
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7581324985587664363}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: da97190a8bb1f8c41b5ec673932e4f1d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &8822022101613806231
 GameObject:
   m_ObjectHideFlags: 0
