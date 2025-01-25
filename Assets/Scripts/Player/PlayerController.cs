@@ -11,6 +11,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     [Range(0f, 20f)]
     private float _jump_impulse_force = 1f;
+    [SerializeField]
+    [Range(10f, 20f)]
+    private float _horizontal_boundary;
     private Rigidbody2D _rigidbody2D;
     private Vector2 _input_direction;
     private string _horizontal_axis;
@@ -29,6 +32,15 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if(transform.position.x < -_horizontal_boundary)
+        {
+            transform.position = new Vector3(_horizontal_boundary - 0.5f, transform.position.y, transform.position.z);
+        }
+        else if(transform.position.x > _horizontal_boundary)
+        {
+            transform.position = new Vector3(-_horizontal_boundary + 0.5f, transform.position.y, transform.position.z);
+        }
+
         _input_direction = new Vector2(Input.GetAxis(_horizontal_axis), 0f);
         if(_jump_count > 0 && (Input.GetKeyDown(_jump_key_controller) || Input.GetKeyDown(_jump_key_keyboard)))
         {
@@ -44,9 +56,21 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer(LayerMaskNames.GROUND))
+        if (IsCollidingWithGround(collision.collider))
         {
             _jump_count = PlayerConstants.JUMP_COUNT;
+        }
+    }
+
+    private bool IsCollidingWithGround(Collider2D collider2D)
+    {
+        if(_player_id == 1)
+        {
+            return collider2D.gameObject.layer == LayerMask.NameToLayer(LayerMaskNames.PLATFORM1) || collider2D.gameObject.layer == LayerMask.NameToLayer(LayerMaskNames.GROUND);
+        }
+        else
+        {
+            return collider2D.gameObject.layer == LayerMask.NameToLayer(LayerMaskNames.PLATFORM2) || collider2D.gameObject.layer == LayerMask.NameToLayer(LayerMaskNames.GROUND);
         }
     }
 }

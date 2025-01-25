@@ -7,6 +7,10 @@ TagManager:
   - UI
   - Logic
   - Ground
+  - Player1
+  - Player2
+  - Platform_Deadline
+  - Platform
   layers:
   - Default
   - TransparentFX
@@ -15,11 +19,11 @@ TagManager:
   - Water
   - UI
   - Ground
-  - Player
-  - 
-  - 
-  - 
-  - 
+  - Player1
+  - Player2
+  - Platform1
+  - Platform2
+  - Platform_Deadline
   - 
   - 
   - 
