@@ -69,6 +69,9 @@ public class PlatformSpawner : MonoBehaviour
                 generated_platform.transform.position = platform_initial_position;
                 platform_behaviour = generated_platform.GetComponent<PlatformBehaviour>();
             }
+            platform_behaviour.GetComponent<SpriteRenderer>().enabled = true;
+            platform_behaviour.GetComponent<CircleCollider2D>().enabled = true;
+            platform_behaviour.SetExplode(false);
             platform_behaviour.SetScale(Random.Range(_min_platform_scale, _max_platform_scale));
             platform_behaviour.SetSpeed(Random.Range(_min_platform_speed, _max_platform_speed));
             generated_platform.SetActive(true);

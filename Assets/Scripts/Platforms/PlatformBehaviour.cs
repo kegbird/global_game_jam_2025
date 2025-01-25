@@ -3,6 +3,8 @@ using UnityEngine;
 public class PlatformBehaviour : MonoBehaviour
 {
     [SerializeField]
+    private bool _explode;
+    [SerializeField]
     private bool _is_temporary;
     [SerializeField]
     private Transform _player_1_transform;
@@ -12,14 +14,22 @@ public class PlatformBehaviour : MonoBehaviour
     private BoxCollider2D _box_1_collider;
     [SerializeField]
     private BoxCollider2D _box_2_collider;
+    [SerializeField]
+    private CircleCollider2D _circle_collider;
     private Rigidbody2D _rigidbody2D;
     private Transform _platform_deadline;
+    private SpriteRenderer _sprite_renderer;
+    [SerializeField]
+    private ParticleSystem _particle_system;
     [SerializeField]
     [Range(0f, 20f)]
     public float _speed = 1f;
     [SerializeField]
     [Range(0f, 1f)]
     public float _weight_decrement;
+    [SerializeField]
+    public int _score;
+
 
     private void Awake()
     {
@@ -33,20 +43,20 @@ public class PlatformBehaviour : MonoBehaviour
         _platform_deadline = GameObject.FindGameObjectWithTag("Platform_Deadline").transform;
         _box_1_collider = transform.GetChild(0).GetComponent<BoxCollider2D>();
         _box_2_collider = transform.GetChild(1).GetComponent<BoxCollider2D>();
+        _circle_collider = GetComponent<CircleCollider2D>();
+        _sprite_renderer = GetComponent<SpriteRenderer>();
     }
 
     private void Update()
     {
         if(_platform_deadline.position.y < transform.position.y)
         {
-            if(_is_temporary)
-            {
-                Destroy(gameObject);
-            }
-            else
-            {
-                gameObject.SetActive(false);
-            }
+            Disable();
+        }
+
+        if(_explode)
+        {
+            return;
         }
 
         if(_player_1_transform.position.y < transform.position.y)
@@ -65,6 +75,18 @@ public class PlatformBehaviour : MonoBehaviour
         else
         {
             _box_2_collider.enabled = true;
+        }
+    }
+
+    private void Disable()
+    {
+        if (_is_temporary)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            gameObject.SetActive(false);
         }
     }
 
@@ -99,8 +121,30 @@ public class PlatformBehaviour : MonoBehaviour
         _speed = speed;
     }
 
+    public void SetExplode(bool value)
+    {
+        _explode = value;
+    }
+
     public void SetScale(float scale)
     {
         transform.localScale = new Vector3(scale, scale, 1f);
+    }
+
+    public int GetScore()
+    {
+        return _score;
+    }
+
+    public void Explode()
+    {
+        _explode = true;
+        _box_1_collider.enabled = false;
+        _box_2_collider.enabled = false;
+        _circle_collider.enabled = false;
+        _speed = 0f;
+        _particle_system.Play();
+        _sprite_renderer.enabled = false;
+        Invoke("Disable", 2f);
     }
 }

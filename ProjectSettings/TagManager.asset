@@ -11,6 +11,7 @@ TagManager:
   - Player2
   - Platform_Deadline
   - Platform
+  - Throwable
   layers:
   - Default
   - TransparentFX
@@ -24,8 +25,8 @@ TagManager:
   - Platform1
   - Platform2
   - Platform_Deadline
-  - 
-  - 
+  - Throwable
+  - Platform
   - 
   - 
   - 
