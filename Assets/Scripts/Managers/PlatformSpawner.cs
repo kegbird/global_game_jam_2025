@@ -14,7 +14,7 @@ public class PlatformSpawner : MonoBehaviour
     [Range(1, 3)]
     private float _min_platform_speed;
     [SerializeField]
-    [Range(1, 3)]
+    [Range(1, 10)]
     private float _max_platform_speed;
     [SerializeField]
     [Range(0, 2)]

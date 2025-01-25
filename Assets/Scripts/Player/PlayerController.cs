@@ -76,8 +76,8 @@ public class PlayerController : MonoBehaviour
         _vertical_axis = "Vertical" + _player_id;
 
         _jump_key_controller = _player_id == 1 ? KeyCode.Joystick1Button0 : KeyCode.Joystick2Button0;
-        _dash_key_controller = _player_id == 1 ? KeyCode.Joystick1Button2 : KeyCode.Joystick2Button2;
-        _throwable_key_controller = _player_id == 1 ? KeyCode.Joystick1Button3 : KeyCode.Joystick2Button3;
+        _dash_key_controller = _player_id == 1 ? KeyCode.Joystick1Button3 : KeyCode.Joystick2Button3;
+        _throwable_key_controller = _player_id == 1 ? KeyCode.Joystick1Button2 : KeyCode.Joystick2Button2;
         _attack_key_controller = _player_id == 1 ? KeyCode.Joystick1Button1 : KeyCode.Joystick2Button1;
 
         _jump_key_keyboard = _player_id == 1 ? KeyCode.E : KeyCode.O;
@@ -167,7 +167,21 @@ public class PlayerController : MonoBehaviour
             _last_attack_time = Time.time;
             _attack = true;
 
-            float angle = Mathf.Atan2(_input_direction.y, _input_direction.x) * Mathf.Rad2Deg;
+
+            float angle;
+            if (_input_direction.magnitude == 0f)
+            {
+                if (_sprite_renderer.flipX)
+                {
+                    _initial_attack_vector = Vector2.left;
+                }
+                else
+                {
+                    _initial_attack_vector = Vector2.right;
+                }
+            }
+            angle = Mathf.Atan2(_initial_attack_vector.y, _initial_attack_vector.x) * Mathf.Rad2Deg;
+
             Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.forward);
             _sword.transform.rotation = rotation;
             _sword.gameObject.SetActive(true);
@@ -208,7 +222,6 @@ public class PlayerController : MonoBehaviour
             {
                 _animator_controller.SetBool("dash", false);
                 _attack = false;
-                _sword.gameObject.SetActive(false);
             }
         }
     }

@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class ThrowableBehaviour : MonoBehaviour
 {
+    private int cumulated_score;
     private GameManager _game_manager;
     private SpriteRenderer _sprite_renderer;
     private Rigidbody2D _rigidbody2D;
@@ -44,8 +45,9 @@ public class ThrowableBehaviour : MonoBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer(LayerMaskNames.PLATFORM))
         {
             PlatformBehaviour platform_behaviour = collision.gameObject.GetComponent<PlatformBehaviour>();
-            _game_manager.IncreaseScore(platform_behaviour.GetScore(), _player_id);
-            platform_behaviour.Explode();
+            _game_manager.IncreaseScore(platform_behaviour.GetScore() + cumulated_score, _player_id);
+            platform_behaviour.Explode(cumulated_score);
+            cumulated_score++;
         }
 
         if((collision.gameObject.layer == LayerMask.NameToLayer(LayerMaskNames.PLAYER1) && _player_id == 2) || (collision.gameObject.layer == LayerMask.NameToLayer(LayerMaskNames.PLAYER2) && _player_id == 1))

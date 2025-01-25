@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
         _player_2_controller = _player_2_transform.GetComponent<PlayerController>();
         _game_over = false;
         StartCoroutine(_ui_manager.HideBlackScreen());
-        //StartCoroutine(DelayBeforeStartCoroutine());
+        StartCoroutine(DelayBeforeStartCoroutine());
     }
 
     private IEnumerator DelayBeforeStartCoroutine()

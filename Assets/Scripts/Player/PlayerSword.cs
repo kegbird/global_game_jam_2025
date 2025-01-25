@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PlayerSword : MonoBehaviour
 {
+    private int _cumulated_score;
     private int _player_id;
     private GameManager _game_manager;
 
@@ -12,13 +13,25 @@ public class PlayerSword : MonoBehaviour
         _game_manager = GameManager.GetInstance();
     }
 
+    private void OnEnable()
+    {
+        _cumulated_score = 0;
+        Invoke("Disable", 0.5f);
+    }
+
+    private void Disable()
+    {
+        gameObject.SetActive(false);
+    }
+
     public void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer(LayerMaskNames.PLATFORM))
         {
             PlatformBehaviour platform_behaviour = collision.gameObject.GetComponent<PlatformBehaviour>();
             _game_manager.IncreaseScore(platform_behaviour.GetScore(), _player_id);
-            platform_behaviour.Explode();
+            platform_behaviour.Explode(_cumulated_score);
+            _cumulated_score++;
         }
         if ((collision.gameObject.layer == LayerMask.NameToLayer(LayerMaskNames.PLAYER1) && _player_id == 2) || (collision.gameObject.layer == LayerMask.NameToLayer(LayerMaskNames.PLAYER2) && _player_id == 1))
         {

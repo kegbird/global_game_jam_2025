@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class PlatformBehaviour : MonoBehaviour
@@ -21,6 +22,10 @@ public class PlatformBehaviour : MonoBehaviour
     private SpriteRenderer _sprite_renderer;
     [SerializeField]
     private ParticleSystem _particle_system;
+    [SerializeField]
+    private TextMeshProUGUI _score_text;
+    [SerializeField]
+    private Animator _animator;
     [SerializeField]
     [Range(0f, 20f)]
     public float _speed = 1f;
@@ -136,8 +141,10 @@ public class PlatformBehaviour : MonoBehaviour
         return _score;
     }
 
-    public void Explode()
+    public void Explode(int cumuled_score)
     {
+        _score_text.text = string.Format("+{0}", cumuled_score + _score);
+        _animator.SetTrigger("hide");
         _explode = true;
         _box_1_collider.enabled = false;
         _box_2_collider.enabled = false;
