@@ -51,7 +51,7 @@ public class ThrowableBehaviour : MonoBehaviour
         if((collision.gameObject.layer == LayerMask.NameToLayer(LayerMaskNames.PLAYER1) && _player_id == 2) || (collision.gameObject.layer == LayerMask.NameToLayer(LayerMaskNames.PLAYER2) && _player_id == 1))
         {
             PlayerController player_controller = collision.gameObject.GetComponent<PlayerController>();
-            player_controller.ThrowableStun(_direction);
+            player_controller.Knockback(_direction, PlayerConstants.THROWABLE_KNOCKBACK_MAX_SPEED, 0f);
             Disable();
         }
     }
