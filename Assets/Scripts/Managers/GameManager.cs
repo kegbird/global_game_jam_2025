@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator DelayBeforeStartCoroutine()
     {
         _ui_manager.SetTimerText(_round_time.ToString());
-        _ui_manager.SetMessageText("Prepare yourself...");
+        _ui_manager.SetMessageText("Prepare to fall...");
         yield return new WaitForSeconds(3f);
         _player_1_controller.SetGravityScale(2f);
         _player_2_controller.SetGravityScale(2f);
@@ -77,30 +77,25 @@ public class GameManager : MonoBehaviour
                 _game_over = true;
                 if(_player_1_score> _player_2_score)
                 {
-                    _ui_manager.SetMessageText("Player 1 Wins");
                     GameOverManager.PLAYER_WINNER = 1;
                 }
                 else if(_player_2_score > _player_1_score)
                 {
-                    _ui_manager.SetMessageText("Player 2 Wins");
                     GameOverManager.PLAYER_WINNER = 2;
                 }
                 else
                 {
-                    _ui_manager.SetMessageText("Draw");
                     GameOverManager.PLAYER_WINNER = Random.Range(0, 2);
                 }
             }
             if (_player_1_transform.position.y < _player_deadline.position.y)
             {
                 _game_over = true;
-                _ui_manager.SetMessageText("Player 2 Wins");
                 GameOverManager.PLAYER_WINNER = 2;
             }
             else if(_player_2_transform.position.y < _player_deadline.position.y)
             {
                 _game_over = true;
-                _ui_manager.SetMessageText("Player 1 Wins");
                 GameOverManager.PLAYER_WINNER = 1;
             }
         }
@@ -110,8 +105,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(2f);
         _game_sounds_manager.StopCalderonAndTheme();
         yield return StartCoroutine(_ui_manager.ShowBlackScreen());
-        //SceneManager.LoadScene(Constants.GAME_OVER_SCENE);
-        SceneManager.LoadScene(Constants.GAME_SCENE);
+        SceneManager.LoadScene(Constants.GAME_OVER_SCENE);
     }
 
     public void IncreaseScore(int amount, int player_id)

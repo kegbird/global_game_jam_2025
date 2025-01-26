@@ -97,7 +97,7 @@ public class PlatformSpawner : MonoBehaviour
         }
         else
         {
-            return Random.Range(1f, 2f);
+            return Random.Range(1.5f, 2f);
         }
         
     }

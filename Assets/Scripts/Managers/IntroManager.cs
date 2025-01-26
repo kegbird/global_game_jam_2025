@@ -45,6 +45,6 @@ public class IntroManager : MonoBehaviour
         }
         _black_screen.color = new Color(0, 0, 0, 1f);
         _black_screen.raycastTarget = false;
-        SceneManager.LoadScene(Constants.INTRO_SCENE_INDEX);
+        SceneManager.LoadScene(Constants.MAIN_MENU_SCENE_INDEX);
     }
 }
