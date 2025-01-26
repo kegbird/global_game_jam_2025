@@ -67,6 +67,8 @@ public class PlayerController : MonoBehaviour
     private AudioClip[] _jump_audio_clips;
     [SerializeField]
     private AudioClip _dash_clip;
+    [SerializeField]
+    private AudioClip _attack_clip;
     private AudioSource _audio_source;
     private UIManager _ui_manager;
 
@@ -182,6 +184,7 @@ public class PlayerController : MonoBehaviour
         {
             _ui_manager.PlayCooldownAnimation(_player_id, "attack", 1f / PlayerConstants.ATTACK_COOLDOWN);
 
+            _audio_source.PlayOneShot(_attack_clip);
             _animator_controller.SetBool("dash", true);
             _initial_attack_vector = _input_direction;
             _rigidbody2D.AddForce(Vector2.up * _initial_attack_vector.y * PlayerConstants.ATTACK_IMPULSE, ForceMode2D.Impulse);

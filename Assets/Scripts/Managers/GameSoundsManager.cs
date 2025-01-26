@@ -5,6 +5,8 @@ public class GameSoundsManager : MonoBehaviour
 {
     private static GameSoundsManager _instance;
     [SerializeField]
+    private AudioSource _splash_audio_source;
+    [SerializeField]
     private AudioSource _calderon_audio_source;
     [SerializeField]
     private AudioSource _theme_audio_source;
@@ -22,6 +24,11 @@ public class GameSoundsManager : MonoBehaviour
     public static GameSoundsManager GetInstance()
     {
         return _instance;
+    }
+
+    public void PlaySplashFx()
+    {
+        _splash_audio_source.Play();
     }
 
     public void PlayCalderonAndTheme()

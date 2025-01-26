@@ -89,11 +89,13 @@ public class GameManager : MonoBehaviour
             }
             if (_player_1_transform.position.y < _player_deadline.position.y)
             {
+                _game_sounds_manager.PlaySplashFx();
                 _game_over = true;
                 GameOverManager.PLAYER_WINNER = 2;
             }
             else if(_player_2_transform.position.y < _player_deadline.position.y)
             {
+                _game_sounds_manager.PlaySplashFx();
                 _game_over = true;
                 GameOverManager.PLAYER_WINNER = 1;
             }
