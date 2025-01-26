@@ -35,6 +35,10 @@ public class PlatformBehaviour : MonoBehaviour
     [Range(0f, 1f)]
     public float _weight_decrement;
     [SerializeField]
+    private AudioSource _audio_source;
+    [SerializeField]
+    private AudioClip[] _explode_clips;
+    [SerializeField]
     public int _score;
 
 
@@ -45,6 +49,7 @@ public class PlatformBehaviour : MonoBehaviour
 
     private void Start()
     {
+        _audio_source = GetComponent<AudioSource>();
         _player_1_transform = GameObject.FindGameObjectWithTag("Player1").transform;
         _player_2_transform = GameObject.FindGameObjectWithTag("Player2").transform;
         _platform_deadline = GameObject.FindGameObjectWithTag("Platform_Deadline").transform;
@@ -153,6 +158,7 @@ public class PlatformBehaviour : MonoBehaviour
 
     public void Explode(int cumuled_score)
     {
+        _audio_source.PlayOneShot(_explode_clips[Random.Range(0, _explode_clips.Length)]);
         _score_text.text = string.Format("+{0}", cumuled_score + _score);
         _animator.SetTrigger("hide");
         _explode = true;
@@ -164,6 +170,7 @@ public class PlatformBehaviour : MonoBehaviour
 
     private void Explode()
     {
+        _audio_source.PlayOneShot(_explode_clips[Random.Range(0, _explode_clips.Length)]);
         _explode = true;
         _speed = 0f;
         _particle_system.Play();

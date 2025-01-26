@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -9,9 +10,11 @@ public class GameOverManager : MonoBehaviour
     [SerializeField]
     private Image _black_screen;
     [SerializeField]
-    private Image _player_1_win;
+    private Animator _animator;
     [SerializeField]
-    private Image _player_2_win;
+    private TextMeshProUGUI _player;
+    [SerializeField]
+    private AudioSource _audio_source;
 
     private void Start()
     {
@@ -20,13 +23,16 @@ public class GameOverManager : MonoBehaviour
 
     public IEnumerator GameOverCoroutine()
     {
+        _audio_source.Play();
         if(PLAYER_WINNER == 1)
         {
-            _player_1_win.enabled = true;
+            _player.text = "Player 1 Wins";
+            _animator.SetTrigger("p1");
         }
         else
         {
-            _player_2_win.enabled = true;
+            _player.text = "Player 2 Wins";
+            _animator.SetTrigger("p2");
         }
         yield return StartCoroutine(HideBlackScreen());
 
