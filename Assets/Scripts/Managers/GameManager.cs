@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
     }
 
     private IEnumerator GameManagerCoroutine()
-    {
+    {   
         while (!_game_over)
         {
             yield return new WaitForSeconds(1f);
@@ -110,7 +110,8 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(2f);
         _game_sounds_manager.StopCalderonAndTheme();
         yield return StartCoroutine(_ui_manager.ShowBlackScreen());
-        SceneManager.LoadScene(Constants.GAME_OVER_SCENE);
+        //SceneManager.LoadScene(Constants.GAME_OVER_SCENE);
+        SceneManager.LoadScene(Constants.GAME_SCENE);
     }
 
     public void IncreaseScore(int amount, int player_id)
@@ -130,5 +131,10 @@ public class GameManager : MonoBehaviour
     public static GameManager GetInstance()
     {
         return _instance;
+    }
+
+    public float GetRoundTime()
+    {
+        return _round_time;
     }
 }

@@ -32,6 +32,7 @@ public class PlatformSpawner : MonoBehaviour
     private List<GameObject> _platform_list;
     [SerializeField]
     private GameObject _platform;
+    private GameManager _game_manager;
 
     void Awake()
     {
@@ -44,6 +45,7 @@ public class PlatformSpawner : MonoBehaviour
 
     void Start()
     {
+        _game_manager = GameManager.GetInstance();
         StartCoroutine(PlatformSpawnerCoroutine());
     }
 
@@ -75,9 +77,29 @@ public class PlatformSpawner : MonoBehaviour
             platform_behaviour.SetScale(Random.Range(_min_platform_scale, _max_platform_scale));
             platform_behaviour.SetSpeed(Random.Range(_min_platform_speed, _max_platform_speed));
             generated_platform.SetActive(true);
-            yield return new WaitForSeconds(Random.Range(_min_platform_spawn_delay, _max_platform_spawn_delay));
+            yield return new WaitForSeconds(GetDelayByRoundTime());
             platform_index++;
             platform_index %= _platform_list.Count;
         }
     }
+
+    private float GetDelayByRoundTime()
+    {
+        float round_time = _game_manager.GetRoundTime();
+
+        if(round_time > 110f)
+        {
+            return Random.Range(0, 0.5f);
+        }
+        else if (110f > round_time && round_time > 100f)
+        {
+            return Random.Range(0.5f, 1f);
+        }
+        else
+        {
+            return Random.Range(1f, 2f);
+        }
+        
+    }
+
 }

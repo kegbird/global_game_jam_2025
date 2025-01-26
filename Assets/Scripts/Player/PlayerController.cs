@@ -68,6 +68,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private AudioClip _dash_clip;
     private AudioSource _audio_source;
+    private UIManager _ui_manager;
 
     private void Awake()
     {
@@ -97,6 +98,11 @@ public class PlayerController : MonoBehaviour
         _left_throwable_anchor = transform.GetChild(1);
 
         _jump_count = PlayerConstants.JUMP_COUNT;
+    }
+
+    private void Start()
+    {
+        _ui_manager = UIManager.GetInstance();
     }
 
     private void Update()
@@ -145,6 +151,8 @@ public class PlayerController : MonoBehaviour
         //Dash
         if (Time.time - _last_dash_time > PlayerConstants.DASH_COOLDOWN && (Input.GetKeyDown(_dash_key_controller) || Input.GetKeyDown(_dash_key_keyboard)))
         {
+            _ui_manager.PlayCooldownAnimation(_player_id, "dash", 1f/PlayerConstants.DASH_COOLDOWN);
+
             _audio_source.PlayOneShot(_dash_clip);
             _last_dash_time = Time.time;
             _animator_controller.SetBool("dash", true);
@@ -162,6 +170,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             _dash_speed = Mathf.Lerp(_dash_max_speed, 0f, Time.time - _last_dash_time / PlayerConstants.DASH_LERP_TIME);
+
             if (_dash_speed == 0f)
             {
                 _animator_controller.SetBool("dash", false);
@@ -171,6 +180,8 @@ public class PlayerController : MonoBehaviour
         //Attack
         if (Time.time - _last_attack_time > PlayerConstants.ATTACK_COOLDOWN && (Input.GetKeyDown(_attack_key_controller) || Input.GetKeyDown(_attack_key_keyboard)))
         {
+            _ui_manager.PlayCooldownAnimation(_player_id, "attack", 1f / PlayerConstants.ATTACK_COOLDOWN);
+
             _animator_controller.SetBool("dash", true);
             _initial_attack_vector = _input_direction;
             _rigidbody2D.AddForce(Vector2.up * _initial_attack_vector.y * PlayerConstants.ATTACK_IMPULSE, ForceMode2D.Impulse);
@@ -196,9 +207,12 @@ public class PlayerController : MonoBehaviour
             _sword.gameObject.SetActive(true);
         }
 
+
         //Throwable
         if (Time.time - _last_throwable_time > PlayerConstants.THROWABLE_COOLDOWN && (Input.GetKeyDown(_throwable_key_controller) || Input.GetKeyDown(_throwable_key_keyboard)))
         {
+            _ui_manager.PlayCooldownAnimation(_player_id, "throwable", 1f / PlayerConstants.THROWABLE_COOLDOWN);
+
             _audio_source.PlayOneShot(_throw_audio_clip);
             _last_throwable_time = Time.time;
             GameObject throwable;

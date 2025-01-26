@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    private static UIManager _instance;
     [SerializeField]
     private TextMeshProUGUI _player_1_score;
     [SerializeField]
@@ -14,7 +15,25 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI _message;
     [SerializeField]
+    private Animator _ui_animator;
+    [SerializeField]
     private Image _black_screen;
+
+    private void Awake()
+    {
+        _instance = this;
+    }
+
+    public void PlayCooldownAnimation(int player_id, string icon, float speed)
+    {
+        _ui_animator.SetTrigger(icon +"_"+ player_id);
+        _ui_animator.SetFloat(icon + "_" + player_id + "_speed", speed);
+    }
+
+    public static UIManager GetInstance()
+    {
+        return _instance;
+    }
 
     public void SetMessageText(string message_text)
     {
