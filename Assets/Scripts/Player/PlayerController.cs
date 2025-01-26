@@ -61,6 +61,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private Transform _right_throwable_anchor;
     private Animator _animator_controller;
+    [SerializeField]
+    private AudioClip _throw_audio_clip;
+    [SerializeField]
+    private AudioClip[] _jump_audio_clips;
+    [SerializeField]
+    private AudioClip _dash_clip;
+    private AudioSource _audio_source;
 
     private void Awake()
     {
@@ -70,6 +77,7 @@ public class PlayerController : MonoBehaviour
         _last_throwable_time = Time.time - PlayerConstants.THROWABLE_COOLDOWN;
         _animator_controller = GetComponent<Animator>();
 
+        _audio_source = GetComponent<AudioSource>();
         _sprite_renderer = GetComponent<SpriteRenderer>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _horizontal_axis = "Horizontal" + _player_id;
@@ -96,11 +104,11 @@ public class PlayerController : MonoBehaviour
         // Wrapping
         if (transform.position.x < -_horizontal_boundary)
         {
-            transform.position = new Vector3(_horizontal_boundary - 0.5f, transform.position.y, transform.position.z);
+            transform.position = new Vector3(_horizontal_boundary - 0.5f, Mathf.Clamp(transform.position.y, -100, 8), transform.position.z);
         }
         else if (transform.position.x > _horizontal_boundary)
         {
-            transform.position = new Vector3(-_horizontal_boundary + 0.5f, transform.position.y, transform.position.z);
+            transform.position = new Vector3(-_horizontal_boundary + 0.5f, Mathf.Clamp(transform.position.y, -100, 8), transform.position.z);
         }
 
         //Movement
@@ -129,6 +137,7 @@ public class PlayerController : MonoBehaviour
         //Jump
         if (_jump_count > 0 && (Input.GetKeyDown(_jump_key_controller) || Input.GetKeyDown(_jump_key_keyboard)))
         {
+            _audio_source.PlayOneShot(_jump_audio_clips[_jump_count - 1]);
             _jump_count--;
             _rigidbody2D.AddForce(Vector2.up * PlayerConstants.JUMP_IMPULSE, ForceMode2D.Impulse);
         }
@@ -136,6 +145,7 @@ public class PlayerController : MonoBehaviour
         //Dash
         if (Time.time - _last_dash_time > PlayerConstants.DASH_COOLDOWN && (Input.GetKeyDown(_dash_key_controller) || Input.GetKeyDown(_dash_key_keyboard)))
         {
+            _audio_source.PlayOneShot(_dash_clip);
             _last_dash_time = Time.time;
             _animator_controller.SetBool("dash", true);
 
@@ -167,7 +177,6 @@ public class PlayerController : MonoBehaviour
             _last_attack_time = Time.time;
             _attack = true;
 
-
             float angle;
             if (_input_direction.magnitude == 0f)
             {
@@ -190,6 +199,7 @@ public class PlayerController : MonoBehaviour
         //Throwable
         if (Time.time - _last_throwable_time > PlayerConstants.THROWABLE_COOLDOWN && (Input.GetKeyDown(_throwable_key_controller) || Input.GetKeyDown(_throwable_key_keyboard)))
         {
+            _audio_source.PlayOneShot(_throw_audio_clip);
             _last_throwable_time = Time.time;
             GameObject throwable;
             if (_sprite_renderer.flipX)
@@ -280,5 +290,10 @@ public class PlayerController : MonoBehaviour
             _knockback_max_speed = max_speed * -1f;
         }
         _rigidbody2D.AddForce(Vector2.up * direction.y * impulse, ForceMode2D.Impulse);
+    }
+
+    public void SetGravityScale(float gravity_scale)
+    {
+        _rigidbody2D.gravityScale = gravity_scale;
     }
 }

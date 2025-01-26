@@ -53,7 +53,7 @@ public class PlatformSpawner : MonoBehaviour
         Vector2 platform_initial_position;
         while(true)
         {
-            platform_initial_position = new Vector2(Random.Range(_left_spawning_boundary.position.x, _right_spawning_boundary.position.x), transform.position.y);
+            platform_initial_position = new Vector2(Random.Range(_left_spawning_boundary.position.x, _right_spawning_boundary.position.x), transform.position.y + Random.Range(-1, 1));
 
             GameObject generated_platform;
             PlatformBehaviour platform_behaviour;

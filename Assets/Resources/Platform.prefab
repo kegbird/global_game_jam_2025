@@ -63,6 +63,7 @@ MonoBehaviour:
   _score_text: {fileID: 6204280240057599082}
   _animator: {fileID: 1823696328631283979}
   _speed: 1
+  _delta: 0
   _weight_decrement: 0
   _score: 1
 --- !u!212 &6462245031647013652
@@ -372,7 +373,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: +1
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 295cf834d132063498d4ad9181785c29, type: 2}
   m_sharedMaterial: {fileID: 40412103250355041, guid: 295cf834d132063498d4ad9181785c29, type: 2}
@@ -382,7 +383,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+  m_fontColor: {r: 0, g: 0, b: 0, a: 0}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

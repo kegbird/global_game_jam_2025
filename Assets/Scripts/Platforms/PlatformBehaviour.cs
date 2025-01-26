@@ -30,6 +30,8 @@ public class PlatformBehaviour : MonoBehaviour
     [Range(0f, 20f)]
     public float _speed = 1f;
     [SerializeField]
+    private float _delta;
+    [SerializeField]
     [Range(0f, 1f)]
     public float _weight_decrement;
     [SerializeField]
@@ -54,14 +56,17 @@ public class PlatformBehaviour : MonoBehaviour
 
     private void Update()
     {
-        if(_platform_deadline.position.y < transform.position.y)
-        {
-            Disable();
-        }
-
         if(_explode)
         {
+            _box_1_collider.enabled = false;
+            _box_2_collider.enabled = false;
+            _circle_collider.enabled = false;
             return;
+        }
+
+        if(_platform_deadline.position.y + _delta < transform.position.y)
+        {
+            Explode();
         }
 
         if(_player_1_transform.position.y < transform.position.y)
@@ -81,6 +86,11 @@ public class PlatformBehaviour : MonoBehaviour
         {
             _box_2_collider.enabled = true;
         }
+    }
+
+    private void OnEnable()
+    {
+        _delta = Random.Range(-3, 0);
     }
 
     private void Disable()
@@ -146,9 +156,15 @@ public class PlatformBehaviour : MonoBehaviour
         _score_text.text = string.Format("+{0}", cumuled_score + _score);
         _animator.SetTrigger("hide");
         _explode = true;
-        _box_1_collider.enabled = false;
-        _box_2_collider.enabled = false;
-        _circle_collider.enabled = false;
+        _speed = 0f;
+        _particle_system.Play();
+        _sprite_renderer.enabled = false;
+        Invoke("Disable", 2f);
+    }
+
+    private void Explode()
+    {
+        _explode = true;
         _speed = 0f;
         _particle_system.Play();
         _sprite_renderer.enabled = false;

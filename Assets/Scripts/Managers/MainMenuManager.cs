@@ -2,9 +2,12 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class MainMenuManager : MonoBehaviour
 {
+    [SerializeField]
+    private VideoPlayer _video_player;
     public Image _black_screen;
     [SerializeField]
     private SoundManager _sound_manager;
@@ -80,6 +83,7 @@ public class MainMenuManager : MonoBehaviour
 
     private IEnumerator HideBlackScreen()
     {
+        yield return new WaitUntil(() => _video_player.isPrepared);
         _black_screen.raycastTarget = true;
         for (float i = 1f; i >= 0; i -= Time.deltaTime)
         {
