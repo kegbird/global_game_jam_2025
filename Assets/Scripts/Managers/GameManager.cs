@@ -52,16 +52,15 @@ public class GameManager : MonoBehaviour
     private IEnumerator DelayBeforeStartCoroutine()
     {
         _ui_manager.SetTimerText(_round_time.ToString());
-        _ui_manager.SetMessageText("Prepare to fall...");
+        _ui_manager.SetMessageText("<fade><shake>Prepare to fall...</fade></shake>");
         yield return new WaitForSeconds(3f);
         _player_1_controller.SetGravityScale(2f);
         _player_2_controller.SetGravityScale(2f);
         _player_1_controller.SetEnabled(true);
         _player_2_controller.SetEnabled(true);
         StartCoroutine(GameManagerCoroutine());
-        _ui_manager.SetMessageText("Go!");
+        _ui_manager.SetMessageText("<fade><shake>Go!</fade></shake>");
         yield return new WaitForSeconds(2f);
-        _ui_manager.SetMessageText("");
     }
 
     private IEnumerator GameManagerCoroutine()

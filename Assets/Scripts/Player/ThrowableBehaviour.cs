@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class ThrowableBehaviour : MonoBehaviour
@@ -8,12 +9,15 @@ public class ThrowableBehaviour : MonoBehaviour
     private Rigidbody2D _rigidbody2D;
     private Vector2 _direction;
     private int _player_id;
+    private ParticleSystem _particle_system;
+    private bool _exploded;
 
     private void Awake()
     {
         _game_manager = GameManager.GetInstance();
         _sprite_renderer = GetComponent<SpriteRenderer>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
+        _particle_system = GetComponent<ParticleSystem>();
     }
 
     public void Throw(Vector2 direction, float force, int player_id)
@@ -31,12 +35,20 @@ public class ThrowableBehaviour : MonoBehaviour
         }
         _player_id = player_id;
         _rigidbody2D.AddForce(direction * force, ForceMode2D.Impulse);
-
-        Invoke("Disable", 2f);
     }
 
-    private void Disable()
+    private void Update()
     {
+        if (Mathf.Abs(transform.position.x) > 20f && !_exploded)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+
+    private IEnumerator DisableDelay()
+    {
+        yield return new WaitForSeconds(0.5f);
         Destroy(gameObject);
     }
 
@@ -54,7 +66,11 @@ public class ThrowableBehaviour : MonoBehaviour
         {
             PlayerController player_controller = collision.gameObject.GetComponent<PlayerController>();
             player_controller.Knockback(_direction, PlayerConstants.THROWABLE_KNOCKBACK_MAX_SPEED, 0f);
-            Disable();
+            _sprite_renderer.enabled = false;
+            _rigidbody2D.linearVelocity = Vector2.zero;
+            _particle_system.Play();
+            _exploded = true;
+            StartCoroutine(DisableDelay());
         }
     }
 }

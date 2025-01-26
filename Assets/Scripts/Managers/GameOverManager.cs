@@ -26,12 +26,12 @@ public class GameOverManager : MonoBehaviour
         _audio_source.Play();
         if(PLAYER_WINNER == 1)
         {
-            _player.text = "Player 1 Wins";
+            _player.text = "<wave a=0.1>Player 1 Wins";
             _animator.SetTrigger("p1");
         }
         else
         {
-            _player.text = "Player 2 Wins";
+            _player.text = "<wave a=0.1>Player 2 Wins";
             _animator.SetTrigger("p2");
         }
         yield return StartCoroutine(HideBlackScreen());
